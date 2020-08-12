@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/ToiletSeat_BuoyancyMesh.obj-60590231cbe1364d516bf19b213226cc.mesh"
+
+[deps]
+
+files=[ "res://.import/ToiletSeat_BuoyancyMesh.obj-60590231cbe1364d516bf19b213226cc.mesh" ]
+
+source_file="res://eegg/ToiletSeat_BuoyancyMesh.obj"
+dest_files=[ "res://.import/ToiletSeat_BuoyancyMesh.obj-60590231cbe1364d516bf19b213226cc.mesh", "res://.import/ToiletSeat_BuoyancyMesh.obj-60590231cbe1364d516bf19b213226cc.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

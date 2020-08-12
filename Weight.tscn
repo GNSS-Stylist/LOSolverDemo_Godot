@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+metallic = 0.78
+roughness = 0.63
+
+[sub_resource type="CylinderMesh" id=2]
+material = SubResource( 1 )
+top_radius = 0.025
+bottom_radius = 0.025
+radial_segments = 16
+rings = 1
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.262745, 0.180392, 0.180392, 1 )
+metallic = 0.6
+metallic_specular = 0.47
+roughness = 0.34
+
+[sub_resource type="SphereMesh" id=4]
+material = SubResource( 3 )
+radius = 0.25
+height = 0.5
+radial_segments = 16
+rings = 16
+
+[node name="Weight" type="Spatial"]
+
+[node name="Bar" type="MeshInstance" parent="."]
+transform = Transform( -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="EndWeight_1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="EndWeight_2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
+mesh = SubResource( 4 )
+material/0 = null

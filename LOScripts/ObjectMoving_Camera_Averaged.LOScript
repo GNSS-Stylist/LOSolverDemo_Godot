@@ -1,0 +1,9 @@
+META	HEADER	GNSS location/orientation script
+META	VERSION	1.0.0
+META	FORMAT	ASCII
+META	CONTENT	DEFAULT
+META	COMMENT	This file contains averaged data over the full log "ObjectMoving_Camera.LOScript".
+META	COMMENT	Basis vectors are not normalized (the are also averaged), but godot script should handle that.
+META	END
+iTOW	Origin_X	Origin_Y	Origin_Z	Basis_XX	Basis_XY	Basis_XZ	Basis_YX	Basis_YY	Basis_YZ	Basis_ZX	Basis_ZY	Basis_ZZ
+114900625	1.024792142	0.354416749	0.241032151	0.066028918	0.008994612	-0.997768029	0.136863853	0.990413875	0.017987607	0.988380422	-0.137748047	0.064161697

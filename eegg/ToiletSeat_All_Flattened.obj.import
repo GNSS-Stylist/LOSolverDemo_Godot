@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/ToiletSeat_All_Flattened.obj-c85388f19d3405f1664ecc2790c3b21c.mesh"
+
+[deps]
+
+files=[ "res://.import/ToiletSeat_All_Flattened.obj-c85388f19d3405f1664ecc2790c3b21c.mesh" ]
+
+source_file="res://eegg/ToiletSeat_All_Flattened.obj"
+dest_files=[ "res://.import/ToiletSeat_All_Flattened.obj-c85388f19d3405f1664ecc2790c3b21c.mesh", "res://.import/ToiletSeat_All_Flattened.obj-c85388f19d3405f1664ecc2790c3b21c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

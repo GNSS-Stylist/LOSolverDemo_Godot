@@ -1,0 +1,52 @@
+License for the project made using Godot engine:
+(3D-models used have separate licenses, see below)
+
+MIT License
+
+Copyright (c) 2018 Roujel Williams
+Copyright (c) 2019 Jon Ring
+Copyright (c) 2020 Pasi Nuutinmaki
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+Following 3D-models used with their respective (CC-BY) licenses:
+
+* 'Low Poly Horse' by sketchfab user 'Nioma van der Steen' (https://sketchfab.com/fromthestone):
+https://sketchfab.com/3d-models/low-poly-horse-c8778532ab804fc18cae6a0e20feffd3
+(Files can be found from a folder 'low_poly_horse')
+
+* 'Low-Poly Car' by sketchfab user 'Lawrence Pompey' (https://sketchfab.com/imaginerd3d):
+https://sketchfab.com/3d-models/low-poly-car-3bee85b8530046e5bb11a57965129187
+(Files can be found from a folder 'low-poly_car')
+
+* 'Low Poly Plane' by sketchfab user 'scailman' (https://sketchfab.com/scailman):
+https://sketchfab.com/3d-models/low-poly-plane-76230052903540e9aeb46b7db35329e4
+(Files can be found from a folder 'low_poly_plane')
+
+* 'Pixel Low Poly Spaceship' by sketchfab user 'Tony' (https://sketchfab.com/tony_zerobudgetgames):
+https://sketchfab.com/3d-models/pixel-low-poly-spaceship-eaad1ae4bf6a43fd9f3a80400dacbbfd
+(Files can be found from a folder 'pixel_low_poly_spaceship')
+
+All the 3D-models above are under Creative Commons Attribution 4.0 license (CC-BY 4.0) 
+by their owners. Full terms at https://creativecommons.org/licenses/by/4.0/
+
+As said, the aforementioned license does not apply to the project made with Godot engine.
+It is licensed under the MIT-license as shown in the beginning of this document.
+Godot engine itself is licenced under MIT license.

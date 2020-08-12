@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/TrashcanBuoyancyMesh.obj-d2722d6ec0f635a7762a3487371a4b9c.mesh"
+
+[deps]
+
+files=[ "res://.import/TrashcanBuoyancyMesh.obj-d2722d6ec0f635a7762a3487371a4b9c.mesh" ]
+
+source_file="res://eegg/TrashcanBuoyancyMesh.obj"
+dest_files=[ "res://.import/TrashcanBuoyancyMesh.obj-d2722d6ec0f635a7762a3487371a4b9c.mesh", "res://.import/TrashcanBuoyancyMesh.obj-d2722d6ec0f635a7762a3487371a4b9c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true
