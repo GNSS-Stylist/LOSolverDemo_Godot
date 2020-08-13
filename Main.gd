@@ -19,10 +19,10 @@ var datasets = [
 	[384909000, 385002000, "res://LOScripts/AllMoving2_Object.LOScript", "res://LOScripts/AllMoving2_Camera.LOScript"],
 	[29300000,  29357000,  "res://LOScripts/AllMoving3_Object.LOScript", "res://LOScripts/AllMoving3_Camera.LOScript"],
 	[383596000, 383748000, "res://LOScripts/ObjectStill_AndCat_Object.LOScript", "res://LOScripts/ObjectStill_AndCat_Camera.LOScript"],
-	[115090125, 115173500, "res://LOScripts/CameraMoving_Object_Averaged.LOScript", "res://LOScripts/CameraMoving_Camera.LOScript"],
-	[114761500, 115028250, "res://LOScripts/ObjectMoving_Object.LOScript", "res://LOScripts/ObjectMoving_Camera_Averaged.LOScript"],
-	[123591125, 123802250, "res://LOScripts/ObjectMoving2_Object.LOScript", "res://LOScripts/ObjectMoving2_Camera_Averaged.LOScript"],
-	[124070000, 124252125, "res://LOScripts/ObjectWiggle_Object.LOScript", "res://LOScripts/ObjectWiggle_Camera_Averaged.LOScript"],
+	[115117000, 115170000, "res://LOScripts/CameraMoving_Object_Averaged.LOScript", "res://LOScripts/CameraMoving_Camera.LOScript"],
+	[114841000, 115005000, "res://LOScripts/ObjectMoving_Object.LOScript", "res://LOScripts/ObjectMoving_Camera_Averaged.LOScript"],
+	[123684000, 123783000, "res://LOScripts/ObjectMoving2_Object.LOScript", "res://LOScripts/ObjectMoving2_Camera_Averaged.LOScript"],
+	[124141000, 124234000, "res://LOScripts/ObjectWiggle_Object.LOScript", "res://LOScripts/ObjectWiggle_Camera_Averaged.LOScript"],
 ]
 
 # Use the following when full ITOW-range is needed (like when generating videos?)
@@ -30,8 +30,12 @@ var datasets_full = [
 	# [Start ITOW, End ITOW, Object LOScript, Camera LOScript ]
 	[384433000, 384719750, "res://LOScripts/AllMoving_Object.LOScript", "res://LOScripts/AllMoving_Camera.LOScript"],
 	[384851500, 385029250, "res://LOScripts/AllMoving2_Object.LOScript", "res://LOScripts/AllMoving2_Camera.LOScript"],
-	[29267375, 29381625, "res://LOScripts/AllMoving3_Object.LOScript", "res://LOScripts/AllMoving3_Camera.LOScript"],
+	[29267375,  29381625,  "res://LOScripts/AllMoving3_Object.LOScript", "res://LOScripts/AllMoving3_Camera.LOScript"],
 	[383576500, 383759875, "res://LOScripts/ObjectStill_AndCat_Object.LOScript", "res://LOScripts/ObjectStill_AndCat_Camera.LOScript"],
+	[115090125, 115173500, "res://LOScripts/CameraMoving_Object_Averaged.LOScript", "res://LOScripts/CameraMoving_Camera.LOScript"],
+	[114761500, 115028250, "res://LOScripts/ObjectMoving_Object.LOScript", "res://LOScripts/ObjectMoving_Camera_Averaged.LOScript"],
+	[123591125, 123802250, "res://LOScripts/ObjectMoving2_Object.LOScript", "res://LOScripts/ObjectMoving2_Camera_Averaged.LOScript"],
+	[124070000, 124252125, "res://LOScripts/ObjectWiggle_Object.LOScript", "res://LOScripts/ObjectWiggle_Camera_Averaged.LOScript"],
 ]
 
 # Visibility bit masks for different objects (can be added together)
