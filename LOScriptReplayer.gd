@@ -12,7 +12,7 @@ export(QUAT_INTERPOLATION_METHOD) var quatInterpolationMethod = QUAT_INTERPOLATI
 var loData = {}
 var loDataKeys
 
-var nextMatchingITOWIndex:int = 0
+var nextITOWIndex:int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -82,60 +82,64 @@ func _process(_delta):
 		
 	var currentITOW:int = get_node("/root/Main").iTOW + iTOWShift
 	
-	if nextMatchingITOWIndex < loDataKeys.size():
+	if nextITOWIndex < loDataKeys.size():
 		for _i in range(10):
 			# Maybe this faster than using bsearch every time(?)
 			# Run this some rounds to allow some hickups in screen update etc.
-			if nextMatchingITOWIndex < loDataKeys.size() and currentITOW >= loDataKeys[nextMatchingITOWIndex]:
+			if nextITOWIndex < loDataKeys.size() and currentITOW >= loDataKeys[nextITOWIndex]:
 				# Typical case: monotonically increasing ITOW
-				nextMatchingITOWIndex += 1
+				nextITOWIndex += 1
 				continue
-			elif nextMatchingITOWIndex > 0 and currentITOW < loDataKeys[nextMatchingITOWIndex - 1]:
+			elif nextITOWIndex > 0 and currentITOW < loDataKeys[nextITOWIndex - 1]:
 				# Another typical(ish?) case: monotonically decreasing ITOW
-				nextMatchingITOWIndex -= 1
+				nextITOWIndex -= 1
 				continue
 			else:
 				break
 		
-		if (nextMatchingITOWIndex > 0 and nextMatchingITOWIndex < loDataKeys.size() and 
-			(currentITOW < loDataKeys[nextMatchingITOWIndex - 1] or 
-				currentITOW >= loDataKeys[nextMatchingITOWIndex])):
+		if (nextITOWIndex > 0 and nextITOWIndex < loDataKeys.size() and 
+			(currentITOW < loDataKeys[nextITOWIndex - 1] or 
+				currentITOW >= loDataKeys[nextITOWIndex])):
 			# ITOW changed too fast
 			# -> Use bsearch to find the correct index
-			nextMatchingITOWIndex = loDataKeys.bsearch(currentITOW)
+			nextITOWIndex = loDataKeys.bsearch(currentITOW)
 	elif currentITOW < loDataKeys[loDataKeys.size() - 1]:
 		# "Rewind" while in the last item
-		nextMatchingITOWIndex = loDataKeys.bsearch(currentITOW)
+		nextITOWIndex = loDataKeys.bsearch(currentITOW)
 	
-	var nextMatchingITOWValue:int
+	var nextITOWValue:int
 
-	if nextMatchingITOWIndex < loDataKeys.size():
-		nextMatchingITOWValue = loDataKeys[nextMatchingITOWIndex]
+	if nextITOWIndex < loDataKeys.size():
+		nextITOWValue = loDataKeys[nextITOWIndex]
 	else:
-		nextMatchingITOWValue = loDataKeys[loDataKeys.size() - 1]
+		nextITOWValue = loDataKeys[loDataKeys.size() - 1]
 	
 	var origin:Vector3
 	var quat:Quat
 	
-	if nextMatchingITOWIndex <= 0:
-		origin = loData[nextMatchingITOWValue][0]
-		quat = loData[nextMatchingITOWValue][1]
-	elif nextMatchingITOWValue == currentITOW:
-		origin = loData[nextMatchingITOWValue][0]
-		quat = loData[nextMatchingITOWValue][1]
-	elif nextMatchingITOWIndex >= loDataKeys.size() - 1:
+	if nextITOWIndex <= 0:
+		origin = loData[nextITOWValue][0]
+		quat = loData[nextITOWValue][1]
+	elif nextITOWValue == currentITOW:
+		origin = loData[nextITOWValue][0]
+		quat = loData[nextITOWValue][1]
+	elif nextITOWIndex >= loDataKeys.size() - 1:
 		origin = loData[loDataKeys[loDataKeys.size() -1]][0]
 		quat = loData[loDataKeys[loDataKeys.size() -1]][1]
 	else:
-		var lastMatchingITOWValue:int = loDataKeys[nextMatchingITOWIndex - 1]
-		var fraction:float = float(currentITOW - lastMatchingITOWValue) / (nextMatchingITOWValue - lastMatchingITOWValue)
-		if nextMatchingITOWIndex == 1 or nextMatchingITOWIndex == loDataKeys.size() - 1:
-			# linear interpolation
-			origin = loData[lastMatchingITOWValue][0].linear_interpolate(loData[nextMatchingITOWValue][0], fraction)
-			quat = loData[lastMatchingITOWValue][1].slerp(loData[nextMatchingITOWValue][1], fraction)
+		var lastITOWIndex:int = nextITOWIndex - 1
+		var lastITOWValue:int = loDataKeys[lastITOWIndex]
+		var fraction:float = float(currentITOW - lastITOWValue) / (nextITOWValue - lastITOWValue)
+		var origin_a:Vector3 = loData[lastITOWValue][0]
+		var origin_b:Vector3 = loData[nextITOWValue][0]
+		var quat_a:Quat = loData[lastITOWValue][1]
+		var quat_b:Quat = loData[nextITOWValue][1]
+
+		if nextITOWIndex == 1 or nextITOWIndex == loDataKeys.size() - 1:
+			# linear interpolation when cubic not possible
+			origin = origin_a.linear_interpolate(origin_b, fraction)
+			quat = quat_a.slerp(quat_b, fraction)
 		else:
-			var origin_a:Vector3 = loData[loDataKeys[nextMatchingITOWIndex - 1]][0]
-			var origin_b:Vector3 = loData[loDataKeys[nextMatchingITOWIndex]][0]
 
 			match originInterpolationMethod:
 				ORIGIN_INTERPOLATION_METHOD.lastValue:
@@ -147,33 +151,31 @@ func _process(_delta):
 				ORIGIN_INTERPOLATION_METHOD.linear:
 					origin = origin_a.linear_interpolate(origin_b, fraction)
 				ORIGIN_INTERPOLATION_METHOD.cubic:
-					var origin_pre_a:Vector3 = loData[loDataKeys[nextMatchingITOWIndex - 2]][0]
-					var origin_post_b:Vector3 = loData[loDataKeys[nextMatchingITOWIndex + 1]][0]
+					var origin_pre_a:Vector3 = loData[loDataKeys[lastITOWIndex - 1]][0]
+					var origin_post_b:Vector3 = loData[loDataKeys[nextITOWIndex + 1]][0]
 					origin = origin_a.cubic_interpolate(origin_b, origin_pre_a, origin_post_b, fraction)
 				_:
 					origin = origin_a
 
 			match quatInterpolationMethod:
 				QUAT_INTERPOLATION_METHOD.lastValue:
-					quat = loData[lastMatchingITOWValue][1]
+					quat = quat_a
 				QUAT_INTERPOLATION_METHOD.nextValue:
-					quat = loData[nextMatchingITOWValue][1]
+					quat = quat_b
 				QUAT_INTERPOLATION_METHOD.nearestValue:
-					quat = loData[lastMatchingITOWValue][1] if fraction < 0.5 else loData[nextMatchingITOWValue][1]
+					quat = quat_a if fraction < 0.5 else quat_b
 				QUAT_INTERPOLATION_METHOD.slerp:
-					quat = loData[lastMatchingITOWValue][1].slerp(loData[nextMatchingITOWValue][1], fraction)
+					quat = quat_a.slerp(quat_b, fraction)
 				QUAT_INTERPOLATION_METHOD.slerpni:
 					# Causes some strange jitter
-					quat = loData[lastMatchingITOWValue][1].slerpni(loData[nextMatchingITOWValue][1], fraction)
+					quat = quat_a.slerpni(quat_b, fraction)
 				QUAT_INTERPOLATION_METHOD.cubic_slerp:
 					# Causes even stranger jitter
-					var quat_pre_a:Quat = loData[loDataKeys[nextMatchingITOWIndex - 2]][1]
-					var quat_a:Quat = loData[loDataKeys[nextMatchingITOWIndex - 1]][1]
-					var quat_b:Quat = loData[loDataKeys[nextMatchingITOWIndex]][1]
-					var quat_post_b:Quat = loData[loDataKeys[nextMatchingITOWIndex + 1]][1]
+					var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]][1]
+					var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]][1]
 					quat = quat_a.cubic_slerp(quat_b, quat_pre_a, quat_post_b, fraction)
 				_:
-					quat = loData[lastMatchingITOWValue][1]
+					quat = quat_a
 	
 	var basis = Basis(quat)
 	var tr = Transform(basis, origin)
