@@ -108,7 +108,7 @@ func _process(_delta):
 	while (OS.get_ticks_msec() - iTOWstartTicks_msec < 0):
 		# Bit rude way to fix "rewind before the start of times", but works...
 		iTOWstartTicks_msec += (iTOWStart - iTOWEnd)
-	iTOW = iTOWStart + (int(((OS.get_ticks_msec() * replaySpeed - iTOWstartTicks_msec))) % (iTOWStart - iTOWEnd))
+	iTOW = iTOWStart + (int(((OS.get_ticks_msec() - iTOWstartTicks_msec) * replaySpeed)) % (iTOWStart - iTOWEnd))
 
 	if get_node("Panel_UIControls/CheckBox_UseVisibilityScript").pressed and  visibilityScripts.has(dataSetIndexInUse):
 		if (visibilityScriptIndex > 0) and (visibilityScripts[dataSetIndexInUse][visibilityScriptIndex - 1][0] > iTOW):
