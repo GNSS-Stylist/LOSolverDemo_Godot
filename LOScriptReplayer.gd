@@ -5,6 +5,7 @@ enum ORIGIN_INTERPOLATION_METHOD { lastValue, nextValue, nearestValue, linear, c
 
 export var loFilename:String = ""
 export var iTOWShift:int = 0
+export var quatInterpolationDebugOutput:bool = false
 
 export (ORIGIN_INTERPOLATION_METHOD) var originInterpolationMethod = ORIGIN_INTERPOLATION_METHOD.cubic
 export(QUAT_INTERPOLATION_METHOD) var quatInterpolationMethod = QUAT_INTERPOLATION_METHOD.slerp
@@ -157,6 +158,8 @@ func _process(_delta):
 				_:
 					origin = origin_a
 
+			var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]][1]
+			var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]][1]
 			match quatInterpolationMethod:
 				QUAT_INTERPOLATION_METHOD.lastValue:
 					quat = quat_a
@@ -167,16 +170,23 @@ func _process(_delta):
 				QUAT_INTERPOLATION_METHOD.slerp:
 					quat = quat_a.slerp(quat_b, fraction)
 				QUAT_INTERPOLATION_METHOD.slerpni:
-					# Causes some strange jitter
+					# Causes some strange "turning the wrong way"-issues
 					quat = quat_a.slerpni(quat_b, fraction)
 				QUAT_INTERPOLATION_METHOD.cubic_slerp:
-					# Causes even stranger jitter
-					var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]][1]
-					var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]][1]
+					# Causes even stranger "turning the wrong way"- and wobbliness-issues
 					quat = quat_a.cubic_slerp(quat_b, quat_pre_a, quat_post_b, fraction)
 				_:
 					quat = quat_a
+
+			if quatInterpolationDebugOutput:
+				# A bit rude to access other object from here, but this is kind of debug-hack anyway...
+				var dbgString = "\n%s\n%s\n%s (frac: %.3f)\n%s\n%s" % [quatToString(quat_pre_a), quatToString(quat_a), quatToString(quat), fraction, quatToString(quat_b), quatToString(quat_post_b)]
+				var dbgLabel = get_node("/root/Main/Panel_Quat/Label_Quat")
+				dbgLabel.text = dbgString
 	
 	var basis = Basis(quat)
 	var tr = Transform(basis, origin)
 	transform = tr
+
+func quatToString(quat:Quat):
+	return "w: %.3f, x: %.3f, y: %.3f, z: %.3f" % [quat.w, quat.x, quat.y, quat.z]

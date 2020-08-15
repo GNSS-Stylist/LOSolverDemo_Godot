@@ -15,6 +15,10 @@ export var replaySpeed:float = 1
 var datasets = [
 	# [Start ITOW, End ITOW, Object LOScript, Camera LOScript ]
 	# First item here means value 1 in UI's "Dataset"-spinbox
+	
+	# This is for a special quaternion interpolation test
+	[124168900, 124188100, "res://LOScripts/ObjectWiggle_Object.LOScript", "res://LOScripts/ObjectWiggle_Camera_Averaged.LOScript"],
+
 	[384480000, 384662000, "res://LOScripts/AllMoving_Object.LOScript", "res://LOScripts/AllMoving_Camera.LOScript"],
 	[384909000, 385002000, "res://LOScripts/AllMoving2_Object.LOScript", "res://LOScripts/AllMoving2_Camera.LOScript"],
 	[29300000,  29357000,  "res://LOScripts/AllMoving3_Object.LOScript", "res://LOScripts/AllMoving3_Camera.LOScript"],

@@ -299,6 +299,7 @@ margin_left = 125.0
 margin_top = 80.0
 margin_right = 230.0
 margin_bottom = 104.0
+pressed = true
 text = "Car"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -563,13 +564,15 @@ transform = Transform( -0.1, 0, 0, 0, 0.1, 0, 0, 0, -0.1, 0, -0.2, 0.0729586 )
 visible = false
 
 [node name="ObjectCamera" type="Camera" parent="LOSolver_Object"]
-transform = Transform( 1, 0, 0, 0, 0.934466, 0.356053, 0, -0.356053, 0.934466, 0, 0.772761, 1.4041 )
+transform = Transform( 1, 0, 0, 0, 0.934466, 0.356053, 0, -0.356053, 0.934466, 0, 0.772761, 2.47205 )
+current = true
 far = 1000.0
 
 [node name="Weights" parent="LOSolver_Object" instance=ExtResource( 20 )]
 
 [node name="LOSolver_TimeShift" parent="." instance=ExtResource( 8 )]
-iTOWShift = -5000
+quatInterpolationDebugOutput = true
+quatInterpolationMethod = 5
 
 [node name="Triangle" parent="LOSolver_TimeShift" instance=ExtResource( 12 )]
 
@@ -659,4 +662,34 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.75, -6 )
 mesh = SubResource( 19 )
 material/0 = null
+
+[node name="Panel_Quat" type="Panel" parent="."]
+margin_left = 1.0
+margin_top = 347.714
+margin_right = 411.0
+margin_bottom = 459.714
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label_Quat" type="Label" parent="Panel_Quat"]
+margin_left = 70.0
+margin_top = 3.0
+margin_right = 413.0
+margin_bottom = 108.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label_QuatHeader" type="Label" parent="Panel_Quat"]
+margin_top = 3.0
+margin_right = 65.0
+margin_bottom = 107.0
+text = "Quats:
+pre_a:
+a:
+interp:
+b:
+post_b:"
+align = 2
 [connection signal="value_changed" from="Panel_UIControls/SpinBox_Dataset" to="." method="_on_SpinBox_Dataset_value_changed"]
