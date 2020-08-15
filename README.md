@@ -17,7 +17,7 @@ Location / orientation script player demo for Godot
 
 -**E key** go up.
 
--**CTRL key** toggle between fly and edit mode. You cant play with the ocean parameters and fly at the same time.
+-**CTRL key** toggle between fly and edit mode.
 
 -**T key** Increase first person's fly speed.
 
