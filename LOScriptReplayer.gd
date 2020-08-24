@@ -12,9 +12,9 @@ export(QUAT_INTERPOLATION_METHOD) var quatInterpolationMethod = QUAT_INTERPOLATI
 class LOItem:
 	var origin:Vector3
 	var quat:Quat
-	func _init(origin:Vector3, quat:Quat):
-		self.origin = origin
-		self.quat = quat
+	func _init(origin_p:Vector3, quat_p:Quat):
+		self.origin = origin_p
+		self.quat = quat_p
 
 var loData = {}
 var loDataKeys
