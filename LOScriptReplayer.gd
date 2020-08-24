@@ -9,6 +9,13 @@ export var iTOWShift:int = 0
 export (ORIGIN_INTERPOLATION_METHOD) var originInterpolationMethod = ORIGIN_INTERPOLATION_METHOD.cubic
 export(QUAT_INTERPOLATION_METHOD) var quatInterpolationMethod = QUAT_INTERPOLATION_METHOD.slerp
 
+class LOItem:
+	var origin:Vector3
+	var quat:Quat
+	func _init(origin:Vector3, quat:Quat):
+		self.origin = origin
+		self.quat = quat
+
 var loData = {}
 var loDataKeys
 
@@ -52,7 +59,7 @@ func loadFile(fileName):
 		line = file.get_line()
 		var subStrings = line.split("\t")
 		if (subStrings.size() >= (1 + (4 * 3))):
-			var itow = subStrings[0].to_int()
+			var iTOW = subStrings[0].to_int()
 			
 			#Coordinates in Godot's native "EUS"-convention:
 			var origin = Vector3(subStrings[1], subStrings[2], subStrings[3])
@@ -71,7 +78,7 @@ func loadFile(fileName):
 			
 			var quat = Quat(basis)
 			
-			loData[itow] = [origin, quat]
+			loData[iTOW] = LOItem.new(origin, quat)
 	
 	loDataKeys = loData.keys()
 
@@ -118,22 +125,22 @@ func _process(_delta):
 	var quat:Quat
 	
 	if nextITOWIndex <= 0:
-		origin = loData[nextITOWValue][0]
-		quat = loData[nextITOWValue][1]
+		origin = loData[nextITOWValue].origin
+		quat = loData[nextITOWValue].quat
 	elif nextITOWValue == currentITOW:
-		origin = loData[nextITOWValue][0]
-		quat = loData[nextITOWValue][1]
+		origin = loData[nextITOWValue].origin
+		quat = loData[nextITOWValue].quat
 	elif nextITOWIndex >= loDataKeys.size() - 1:
-		origin = loData[loDataKeys[loDataKeys.size() -1]][0]
-		quat = loData[loDataKeys[loDataKeys.size() -1]][1]
+		origin = loData[loDataKeys[loDataKeys.size() -1]].origin
+		quat = loData[loDataKeys[loDataKeys.size() -1]].quat
 	else:
 		var lastITOWIndex:int = nextITOWIndex - 1
 		var lastITOWValue:int = loDataKeys[lastITOWIndex]
 		var fraction:float = float(currentITOW - lastITOWValue) / (nextITOWValue - lastITOWValue)
-		var origin_a:Vector3 = loData[lastITOWValue][0]
-		var origin_b:Vector3 = loData[nextITOWValue][0]
-		var quat_a:Quat = loData[lastITOWValue][1]
-		var quat_b:Quat = loData[nextITOWValue][1]
+		var origin_a:Vector3 = loData[lastITOWValue].origin
+		var origin_b:Vector3 = loData[nextITOWValue].origin
+		var quat_a:Quat = loData[lastITOWValue].quat
+		var quat_b:Quat = loData[nextITOWValue].quat
 
 		if nextITOWIndex == 1 or nextITOWIndex == loDataKeys.size() - 1:
 			# linear interpolation when cubic not possible
@@ -151,8 +158,8 @@ func _process(_delta):
 				ORIGIN_INTERPOLATION_METHOD.linear:
 					origin = origin_a.linear_interpolate(origin_b, fraction)
 				ORIGIN_INTERPOLATION_METHOD.cubic:
-					var origin_pre_a:Vector3 = loData[loDataKeys[lastITOWIndex - 1]][0]
-					var origin_post_b:Vector3 = loData[loDataKeys[nextITOWIndex + 1]][0]
+					var origin_pre_a:Vector3 = loData[loDataKeys[lastITOWIndex - 1]].origin
+					var origin_post_b:Vector3 = loData[loDataKeys[nextITOWIndex + 1]].origin
 					origin = origin_a.cubic_interpolate(origin_b, origin_pre_a, origin_post_b, fraction)
 				_:
 					origin = origin_a
@@ -171,8 +178,8 @@ func _process(_delta):
 					quat = quat_a.slerpni(quat_b, fraction)
 				QUAT_INTERPOLATION_METHOD.cubic_slerp:
 					# Causes even stranger jitter
-					var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]][1]
-					var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]][1]
+					var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]].quat
+					var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]].quat
 					quat = quat_a.cubic_slerp(quat_b, quat_pre_a, quat_post_b, fraction)
 				_:
 					quat = quat_a
