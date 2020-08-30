@@ -116,6 +116,7 @@ size = Vector3( 5, 3, 7.5 )
 [node name="Main" type="Node"]
 pause_mode = 2
 script = ExtResource( 18 )
+replaySpeed = 0.2
 
 [node name="FirstPerson" parent="." instance=ExtResource( 7 )]
 pause_mode = 2
@@ -664,32 +665,39 @@ mesh = SubResource( 19 )
 material/0 = null
 
 [node name="Panel_Quat" type="Panel" parent="."]
-margin_left = 1.0
-margin_top = 347.714
-margin_right = 411.0
-margin_bottom = 459.714
+anchor_top = 0.793
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = -69.22
+margin_right = 517.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label_Quat" type="Label" parent="Panel_Quat"]
-margin_left = 70.0
-margin_top = 3.0
-margin_right = 413.0
-margin_bottom = 108.0
+margin_left = 149.0
+margin_top = 3.77979
+margin_right = 513.0
+margin_bottom = 108.78
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label_QuatHeader" type="Label" parent="Panel_Quat"]
 margin_top = 3.0
-margin_right = 65.0
-margin_bottom = 107.0
+margin_right = 145.0
+margin_bottom = 168.0
 text = "Quats:
 pre_a:
 a:
-interp:
+interp (as selected)::
 b:
-post_b:"
+post_b:
+
+interp (slerp):
+diff (selected-slerp):"
 align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="value_changed" from="Panel_UIControls/SpinBox_Dataset" to="." method="_on_SpinBox_Dataset_value_changed"]

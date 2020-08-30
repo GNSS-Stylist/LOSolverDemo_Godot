@@ -188,7 +188,21 @@ func _process(_delta):
 
 			if quatInterpolationDebugOutput:
 				# A bit rude to access other object from here, but this is kind of debug-hack anyway...
-				var dbgString = "\n%s\n%s\n%s (frac: %.3f)\n%s\n%s" % [quatToString(quat_pre_a), quatToString(quat_a), quatToString(quat), fraction, quatToString(quat_b), quatToString(quat_post_b)]
+				var dbgSlerpedQuat = quat_a.slerp(quat_b, fraction)
+				
+				# Small value added here to prevent flickering "-"-sign in output
+				var dbgDiffQuat = Quat(
+						quat.x - dbgSlerpedQuat.x + 0.00001, 
+						quat.y - dbgSlerpedQuat.y + 0.00001, 
+						quat.z - dbgSlerpedQuat.z + 0.00001, 
+						quat.w - dbgSlerpedQuat.w + 0.00001)
+						
+				var dbgString = "\n%s\n%s\n%s (frac: %.3f)\n%s\n%s\n\n%s\n%s" % [
+					quatToString(quat_pre_a), quatToString(quat_a), 
+					quatToString(quat), fraction, quatToString(quat_b), 
+					quatToString(quat_post_b), quatToString(dbgSlerpedQuat), 
+					quatToString(dbgDiffQuat)]
+					
 				var dbgLabel = get_node("/root/Main/Panel_Quat/Label_Quat")
 				dbgLabel.text = dbgString
 	
