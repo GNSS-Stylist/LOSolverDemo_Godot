@@ -10,7 +10,7 @@ var direction = Vector3()
 var velocityMultiplier = 0.2
 
 #fly variables
-const FLY_SPEED = 20
+const FLY_SPEED = 5
 const FLY_ACCEL = 4
 
 var mouse_captured = false

@@ -14,7 +14,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	var loSolverObject = get_node("../LOSolver_Object")
+	var loSolverObject = get_node("../LOSolver_Interpolated")
 	var newTranslation = loSolverObject.global_transform.origin
 	newTranslation += loSolverObject.global_transform.basis.z * 0.25
 	newTranslation[1] = max((1.85 - 2.0 + groundLevel), (loSolverObject.global_transform.origin.y - 2.0 + 0.05))

@@ -1,6 +1,6 @@
 extends Spatial
 
-enum QUAT_INTERPOLATION_METHOD { lastValue, nextValue, nearestValue, slerp, slerpni, cubic_slerp }
+enum QUAT_INTERPOLATION_METHOD { lastLastValue, lastValue, nextValue, nextNextValue, nearestValue, slerp, slerpni, cubic_slerp }
 enum ORIGIN_INTERPOLATION_METHOD { lastValue, nextValue, nearestValue, linear, cubic }
 
 export var loFilename:String = ""
@@ -9,6 +9,10 @@ export var quatInterpolationDebugOutput:bool = false
 
 export (ORIGIN_INTERPOLATION_METHOD) var originInterpolationMethod = ORIGIN_INTERPOLATION_METHOD.cubic
 export(QUAT_INTERPOLATION_METHOD) var quatInterpolationMethod = QUAT_INTERPOLATION_METHOD.slerp
+
+# To get sparser data for quaternion interpolation tests:
+# 0 -> Does not skip any lines, 1 -> Skips every other line etc.
+const readLineSkip = 3
 
 class LOItem:
 	var origin:Vector3
@@ -55,14 +59,22 @@ func loadFile(fileName):
 		return
 
 	while not file.eof_reached():
+		
+		for _i in range(readLineSkip):
+			# To get sparser data for quaternion interpolation tests
+			file.get_line()
+		
 		# TODO: Maybe add some error checking here...
+		
 		line = file.get_line()
 		var subStrings = line.split("\t")
 		if (subStrings.size() >= (1 + (4 * 3))):
 			var iTOW = subStrings[0].to_int()
 			
 			#Coordinates in Godot's native "EUS"-convention:
-			var origin = Vector3(subStrings[1], subStrings[2], subStrings[3])
+			# (Replaced with a constant here for quaternion interpolation bug-testing)
+#			var origin = Vector3(subStrings[1], subStrings[2], subStrings[3])
+			var origin = Vector3(0, 2, 0)
 			var unitVecX = Vector3(subStrings[4], subStrings[5], subStrings[6])
 			var unitVecY = Vector3(subStrings[7], subStrings[8], subStrings[9])
 			var unitVecZ = Vector3(subStrings[10], subStrings[11], subStrings[12])
@@ -167,10 +179,14 @@ func _process(_delta):
 			var quat_pre_a:Quat = loData[loDataKeys[lastITOWIndex - 1]].quat
 			var quat_post_b:Quat = loData[loDataKeys[nextITOWIndex + 1]].quat
 			match quatInterpolationMethod:
+				QUAT_INTERPOLATION_METHOD.lastLastValue:
+					quat = quat_pre_a
 				QUAT_INTERPOLATION_METHOD.lastValue:
 					quat = quat_a
 				QUAT_INTERPOLATION_METHOD.nextValue:
 					quat = quat_b
+				QUAT_INTERPOLATION_METHOD.nextNextValue:
+					quat = quat_post_b
 				QUAT_INTERPOLATION_METHOD.nearestValue:
 					quat = quat_a if fraction < 0.5 else quat_b
 				QUAT_INTERPOLATION_METHOD.slerp:
@@ -192,10 +208,10 @@ func _process(_delta):
 				
 				# Small value added here to prevent flickering "-"-sign in output
 				var dbgDiffQuat = Quat(
-						quat.x - dbgSlerpedQuat.x + 0.00001, 
-						quat.y - dbgSlerpedQuat.y + 0.00001, 
-						quat.z - dbgSlerpedQuat.z + 0.00001, 
-						quat.w - dbgSlerpedQuat.w + 0.00001)
+						quat.x - dbgSlerpedQuat.x + 0.000001, 
+						quat.y - dbgSlerpedQuat.y + 0.000001, 
+						quat.z - dbgSlerpedQuat.z + 0.000001, 
+						quat.w - dbgSlerpedQuat.w + 0.000001)
 						
 				var dbgString = "\n%s\n%s\n%s (frac: %.3f)\n%s\n%s\n\n%s\n%s" % [
 					quatToString(quat_pre_a), quatToString(quat_a), 
@@ -211,4 +227,4 @@ func _process(_delta):
 	transform = tr
 
 func quatToString(quat:Quat):
-	return "w: %.3f, x: %.3f, y: %.3f, z: %.3f" % [quat.w, quat.x, quat.y, quat.z]
+	return "w: %.4f, x: %.4f, y: %.4f, z: %.4f" % [quat.w, quat.x, quat.y, quat.z]

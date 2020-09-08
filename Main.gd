@@ -19,7 +19,7 @@ var datasets = [
 	# This is for a special quaternion interpolation test
 	[124168900, 124188100, "res://LOScripts/ObjectWiggle_Object.LOScript", "res://LOScripts/ObjectWiggle_Camera_Averaged.LOScript"],
 
-	[384480000, 384662000, "res://LOScripts/AllMoving_Object.LOScript", "res://LOScripts/AllMoving_Camera.LOScript"],
+	[384481600, 384662000, "res://LOScripts/AllMoving_Object.LOScript", "res://LOScripts/AllMoving_Camera.LOScript"],
 	[384909000, 385002000, "res://LOScripts/AllMoving2_Object.LOScript", "res://LOScripts/AllMoving2_Camera.LOScript"],
 	[29300000,  29357000,  "res://LOScripts/AllMoving3_Object.LOScript", "res://LOScripts/AllMoving3_Camera.LOScript"],
 	[383596000, 383748000, "res://LOScripts/ObjectStill_AndCat_Object.LOScript", "res://LOScripts/ObjectStill_AndCat_Camera.LOScript"],
@@ -50,7 +50,7 @@ const V_HORSE:int = 1 << 3
 const V_HORSE_SIDEWAYS:int = 1 << 4
 const V_AEROPLANE:int = 1 << 5
 const V_SPACESHIP:int = 1 << 6
-const V_WEIGHTS:int = 1 << 7
+const V_BASIS:int = 1 << 7
 
 # Scripts defining visibilities of different objects.
 # ITOW value is used as a "key".
@@ -61,7 +61,7 @@ var visibilityScripts = {
 	0: [	# ITOW, objects, TimeShifted object, Timeshift value
 		[384433000, V_CAR, 0, -25000],
 		[384522111, V_SPACESHIP, 0, -25000],
-		[384547045, V_WEIGHTS, 0, -25000],
+		[384547045, V_BASIS, 0, -25000],
 		[384555000, V_CAR, 0, -25000],
 		[384572000, V_CAR, V_SPACESHIP, -25000],	# Sped-up spaceship between this and the next step (timeshift changes by 7 s in 2 seconds of "real time")
 		[384574000, V_HORSE, V_SPACESHIP, -18000],	# Little less sped-up spaceship (timeshift changes by 12 s in about 21 seconds of "real time")
@@ -75,7 +75,7 @@ var visibilityScripts = {
 		[384851500, V_CAR, 0, -5000],
 		[384935000, V_HORSE_SIDEWAYS, 0, -5000],
 		[384944000, V_HORSE, 0, -5000],
-		[384955000, V_WEIGHTS, 0, -5000],
+		[384955000, V_BASIS, 0, -5000],
 		[384961000, V_AEROPLANE, 0, -5000],
 		[384966000, V_AEROPLANE, V_HORSE, -5000],
 		[384994000, V_AEROPLANE, 0, -5000],
@@ -96,6 +96,10 @@ func _ready():
 	datasetSpinBox.min_value = 1
 	datasetSpinBox.max_value = datasets.size()
 	_on_SpinBox_Dataset_value_changed(datasetSpinBox.value)
+	
+	var camera = get_node("FirstPerson/Head/FirstPersonCamera")
+	camera.current = true
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # (delta not used here to get better sync when generating video)
@@ -141,7 +145,7 @@ func _process(_delta):
 				get_node("Panel_UIControls/CheckBox_Object_HorseSideways").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][1] & V_HORSE_SIDEWAYS
 				get_node("Panel_UIControls/CheckBox_Object_Aeroplane").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][1] & V_AEROPLANE
 				get_node("Panel_UIControls/CheckBox_Object_Spaceship").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][1] & V_SPACESHIP
-				get_node("Panel_UIControls/CheckBox_Object_Weights").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][1] & V_WEIGHTS
+				get_node("Panel_UIControls/CheckBox_Object_Basis").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][1] & V_BASIS
 				
 				get_node("Panel_UIControls/CheckBox_Timeshift_Triangle").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_TRIANGLE
 				get_node("Panel_UIControls/CheckBox_Timeshift_Car").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_CAR
@@ -150,7 +154,7 @@ func _process(_delta):
 				get_node("Panel_UIControls/CheckBox_Timeshift_HorseSideways").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_HORSE_SIDEWAYS
 				get_node("Panel_UIControls/CheckBox_Timeshift_Aeroplane").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_AEROPLANE
 				get_node("Panel_UIControls/CheckBox_Timeshift_Spaceship").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_SPACESHIP
-				get_node("Panel_UIControls/CheckBox_Timeshift_Weights").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_WEIGHTS
+				get_node("Panel_UIControls/CheckBox_Timeshift_Basis").pressed = visibilityScripts[dataSetIndexInUse][visibilityScriptIndex][2] & V_BASIS
 				visibilityScriptIndex += 1
 
 
@@ -165,8 +169,14 @@ func _on_SpinBox_Dataset_value_changed(value):
 		dataSetIndexInUse = index
 		visibilityScriptIndex = 0
 
-		get_node("LOSolver_Object").loadFile(datasets[index][2])
-		get_node("LOSolver_TimeShift").loadFile(datasets[index][2])
+		get_node("LOSolver_Object_A").loadFile(datasets[index][2])
+
+		get_node("LOSolver_Object_Pre_A").loadFile(datasets[index][2])
+		get_node("LOSolver_Object_B").loadFile(datasets[index][2])
+		get_node("LOSolver_Object_Post_B").loadFile(datasets[index][2])
+
+
+		get_node("LOSolver_Interpolated").loadFile(datasets[index][2])
 		get_node("LOSolver_Camera").loadFile(datasets[index][3])
 	else:
 		print("Dataset not found!")
@@ -179,7 +189,10 @@ func camSwitch():
 		var camera = get_node("LOSolver_Camera/RigCamera")
 		camera.current = true
 	if Input.is_action_pressed("camera_3"):
-		var camera = get_node("LOSolver_Object/ObjectCamera")
+		var camera = get_node("LOSolver_Interpolated/ObjectCamera")
+		camera.current = true
+	if Input.is_action_pressed("camera_4"):
+		var camera = get_node("LOSolver_Interpolated/ObjectCamera_Zoomed")
 		camera.current = true
 
 func handleScriptPlaybackControls():
@@ -189,3 +202,4 @@ func handleScriptPlaybackControls():
 		iTOWstartTicks_msec = iTOWstartTicks_msec - 5000
 	if Input.is_action_pressed("resetITOW"):
 		iTOWstartTicks_msec = OS.get_ticks_msec()
+		$BasisTraces.clearHistory()
